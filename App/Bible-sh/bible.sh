@@ -7,8 +7,7 @@ main() {
     kjvdir="$appdir/kjv"
     bookdir="$kjvdir/books"
 
-    echo "Welcome to Bible.sh"
-    sleep 2
+    welcome_screen
 
     local option
     while true; do
@@ -35,6 +34,38 @@ main() {
                 ;;
         esac
     done
+}
+
+welcome_screen() {
+    cat << "EOF"
+ ____  _ _     _            _
+| __ )(_) |__ | | ___   ___| |__
+|  _ \| | '_ \| |/ _ \ / __| '_ \
+| |_) | | |_) | |  __/_\__ \ | | |
+|____/|_|_.__/|_|\___(_)___/_| |_|
+
+==================================
+
+
+
+
+
+             __
+            /_/\/\
+            \_\  /
+            /_/  \
+            \_\/\ \
+               \_\/
+
+
+
+
+
+
+"Thy word is a lamp unto my feet, and a light unto my path."
+- Psalm 119:105
+EOF
+    sleep 7
 }
 
 make_selection() {
