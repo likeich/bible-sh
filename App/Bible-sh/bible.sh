@@ -6,12 +6,18 @@ main() {
     appdir=$(dirname "$0")
     kjvdir="$appdir/kjv"
     bookdir="$kjvdir/books"
+    scriptdir="$appdir/scripts"
+    csvfile="$appdir/settings.csv"
+
+    # Source the csv.sh script
+    . "$scriptdir/csv.sh"
 
     welcome_screen
 
     local option
     while true; do
         option=$(view_menu)
+        > "$csvfile"
         case $option in
             "1. View Book")
                 book_text=$(select_book_text)
@@ -39,8 +45,9 @@ main() {
 welcome_screen() {
     cat << "EOF"
  ____  _ _     _            _
-| __ )(_) |__ | | ___   ___| |__
-|  _ \| | '_ \| |/ _ \ / __| '_ \
+|  _ \(_) |   | |          | |
+| |_) |_| |__ | | ___   ___| |__
+|  _ <| | '_ \| |/ _ \ / __| '_ \
 | |_) | | |_) | |  __/_\__ \ | | |
 |____/|_|_.__/|_|\___(_)___/_| |_|
 
@@ -61,11 +68,11 @@ welcome_screen() {
 
 
 
-
 "Thy word is a lamp unto my feet, and a light unto my path."
 - Psalm 119:105
 EOF
     sleep 7
+    clear
 }
 
 make_selection() {
@@ -103,7 +110,8 @@ view_text() {
 }
 
 select_book_text() {
-    book=$(make_selection "Select Bible book:" "$(cat "$kjvdir/booklist.txt")")
+    book=$(make_selection "Select a book of the Bible:" "$(cat "$kjvdir/booklist.txt")")
+    add_entry "$csvfile" "current_book" "$book"
     filepath="$bookdir/$book.txt"
     echo "$(cat "$filepath")"
 }
@@ -116,7 +124,9 @@ select_chapter_text() {
     local chapter_headings=$(echo "$book_text" | awk '/CHAPTER [0-9]+/ {print $0}')
 
     # Let user make a selection based on extracted headings
-    local chapter=$(make_selection "Select chapter:" "$chapter_headings")
+    current_book=$(get_value "$csvfile" "current_book")
+    local chapter=$(make_selection "Select chapter from $current_book:" "$chapter_headings")
+    add_entry "$csvfile" "current_chapter" "$chapter"
 
     # Extract the text for the selected chapter
     chapter_text=$(echo "$book_text" | awk -v chap="$chapter" '
@@ -141,8 +151,11 @@ select_verse_text() {
     # Extract verses from the chapter text
     local verse_headings=$(echo "$chapter_text" | awk '/^[0-9]+ / {print $1}')
 
+    current_book=$(get_value "$csvfile" "current_book")
+    current_chapter=$(get_value "$csvfile" "current_chapter")
     # Let user make a selection based on extracted verses
-    local verse=$(make_selection "Select verse from Chapter:" "$verse_headings")
+    local verse=$(make_selection "Select verse from $current_book $current_chapter:" "$verse_headings")
+    add_entry "$csvfile" "current_verse" "$verse"
 
     # Extract the text for the selected verse
     verse_text=$(echo "$chapter_text" | awk -v ver="$verse" '$0 ~ "^" ver "[^0-9]"')
@@ -151,7 +164,7 @@ select_verse_text() {
     if [ -z "$verse_text" ]; then
         echo "No text found for the verse."
     else
-        echo "$verse_text"
+        printf "%s\n\n- %s %s VERSE %s\n" "$verse_text" "$current_book" "$current_chapter" "$verse"
     fi
 }
 
