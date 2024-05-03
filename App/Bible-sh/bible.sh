@@ -12,7 +12,7 @@ main() {
     # Source the csv.sh script
     . "$scriptdir/csv.sh"
 
-    welcome_screen
+    welcome_screen 7
 
     local option
     while true; do
@@ -34,6 +34,9 @@ main() {
                 verse_text=$(select_verse_text "$chapter_text")
                 view_text "$verse_text"
                 ;;
+            "4. View Welcome (15s)")
+                welcome_screen 15
+                ;;
             *)
                 echo "Exiting Bible.sh"
                 exit 0
@@ -43,6 +46,7 @@ main() {
 }
 
 welcome_screen() {
+    clear
     cat << "EOF"
  ____  _ _     _            _
 |  _ \(_) |   | |          | |
@@ -54,24 +58,25 @@ welcome_screen() {
 ==================================
 
 
-
-
-
-             __
-            /_/\/\
-            \_\  /
-            /_/  \
-            \_\/\ \
-               \_\/
-
-
-
+                ,   ,
+               /////|
+              ///// |
+             /////  |
+            |~~~| | |
+            |===| |/|
+            | B |/| |
+            | I | | |
+            | B | | |
+            | L |  /
+            | E | /
+            |===|/
+       jgs  '---'
 
 
 "Thy word is a lamp unto my feet, and a light unto my path."
 - Psalm 119:105
 EOF
-    sleep 7
+    sleep $1
     clear
 }
 
@@ -94,7 +99,7 @@ make_selection() {
 }
 
 view_menu() {
-    echo $(make_selection "The Holy Bible" "1. View Book\n2. View Chapter\n3. View Verse\n4. Exit")
+    echo $(make_selection "The Holy Bible" "1. View Book\n2. View Chapter\n3. View Verse\n4. View Welcome (15s)\n5. Exit")
 }
 
 view_text() {
