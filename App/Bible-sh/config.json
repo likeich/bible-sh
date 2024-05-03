@@ -1,0 +1,7 @@
+{
+  "label": "Bible.sh",
+  "icon": "bible.png",
+  "iconsel": "",
+  "launch": "launch.sh",
+  "description": "A simple Bible app"
+}
