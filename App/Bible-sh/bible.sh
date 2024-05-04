@@ -4,9 +4,10 @@ sysdir=/mnt/SDCARD/.tmp_update
 view_book_option="1. View Book"
 view_chapter_option="2. View Chapter"
 view_verse_option="3. View Verse"
-welcome_option="4. Welcome Menu (15s)"
-about_option="5. About Menu (15s)"
-exit_option="6. Exit"
+dedicatory_option="4. View Dedicatory"
+welcome_option="5. Welcome Menu (15s)"
+about_option="6. About Menu (15s)"
+exit_option="7. Exit"
 
 main() {
     appdir=$(dirname "$0")
@@ -39,6 +40,9 @@ main() {
                 chapter_text=$(select_chapter_text "$book_text")
                 verse_text=$(select_verse_text "$chapter_text")
                 view_text "$verse_text"
+                ;;
+            $dedicatory_option)
+                view_dedicatory
                 ;;
             $welcome_option)
                 welcome_screen 15
@@ -136,7 +140,7 @@ make_selection() {
 }
 
 view_menu() {
-    echo $(make_selection "The Holy Bible" "$view_book_option\n$view_chapter_option\n$view_verse_option\n$welcome_option\n$about_option\n$exit_option")
+    echo $(make_selection "The Holy Bible" "$view_book_option\n$view_chapter_option\n$view_verse_option\n$dedicatory_option\n$welcome_option\n$about_option\n$exit_option")
 }
 
 view_text() {
@@ -149,6 +153,11 @@ view_text() {
     fi
 
     echo "$text" | less
+}
+
+view_dedicatory() {
+    local filepath="$bookdir/Dedicatory.txt"
+    view_text "$(cat "$filepath")"
 }
 
 select_book_text() {
