@@ -4,6 +4,7 @@
 
 # Bible.sh
 A simple King James Version Bible shell script for the Miyoo Mini on OnionOS.
+
 To exit the book/chapter/verse viewer press "X" on the Miyoo Mini to open the software keyboard and press "q" (quit) on the keyboard.
 
 ### Features
@@ -13,6 +14,7 @@ To exit the book/chapter/verse viewer press "X" on the Miyoo Mini to open the so
 
 ## Installation
 Option 1: Drag the "App" folder to the root of the OnionOS SD Card and select the "merge" option.
+
 Option 2: Drag the "Bible-sh" folder in the "App" folder into the "App" folder of the OnionOS SD Card.
 
 Restart your device.
