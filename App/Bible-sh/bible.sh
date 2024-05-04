@@ -1,6 +1,12 @@
 #!/bin/sh
 
 sysdir=/mnt/SDCARD/.tmp_update
+view_book_option="1. View Book"
+view_chapter_option="2. View Chapter"
+view_verse_option="3. View Verse"
+welcome_option="4. Welcome Menu (15s)"
+about_option="5. About Menu (15s)"
+exit_option="6. Exit"
 
 main() {
     appdir=$(dirname "$0")
@@ -19,23 +25,26 @@ main() {
         option=$(view_menu)
         > "$csvfile"
         case $option in
-            "1. View Book")
+            $view_book_option)
                 book_text=$(select_book_text)
                 view_text "$book_text"
                 ;;
-            "2. View Chapter")
+            $view_chapter_option)
                 book_text=$(select_book_text)
                 chapter_text=$(select_chapter_text "$book_text")
                 view_text "$chapter_text"
                 ;;
-            "3. View Verse")
+            $view_verse_option)
                 book_text=$(select_book_text)
                 chapter_text=$(select_chapter_text "$book_text")
                 verse_text=$(select_verse_text "$chapter_text")
                 view_text "$verse_text"
                 ;;
-            "4. View Welcome (15s)")
+            $welcome_option)
                 welcome_screen 15
+                ;;
+            $about_option)
+                about_screen 15
                 ;;
             *)
                 echo "Exiting Bible.sh"
@@ -48,12 +57,12 @@ main() {
 welcome_screen() {
     clear
     cat << "EOF"
-#####  # #####  #      ######      ####  #    #
-#    # # #    # #      #          #      #    #
-#####  # #####  #      #####       ####  ######
-#    # # #    # #      #               # #    #
-#    # # #    # #      #      ### #    # #    #
-#####  # #####  ###### ###### ###  ####  #    #
+#####  # #####  #      ######     ####  #    #
+#    # # #    # #      #         #      #    #
+#####  # #####  #      #####      ####  ######
+#    # # #    # #      #              # #    #
+#    # # #    # #      #      ## #    # #    #
+#####  # #####  ###### ###### ##  ####  #    #
 
 
 
@@ -80,6 +89,34 @@ EOF
     clear
 }
 
+about_screen() {
+    clear
+    cat << "EOF"
+Bible.sh - A Simple Bible Reader
+
+
+Credits
+
+King James Bible Texts
+Source: https://archive.org/details/kjv-text-files
+License: Public Domain
+
+ASCII Art
+Source: https://www.asciiart.eu/religion/christianity
+
+Bible Sticker Icon
+Source: Icon by Icons8 (https://icons8.com)
+License: Universal Multimedia License Agreement for Icons8
+
+Bible.sh
+Author: Kyle Eichlin
+Source: https://github.com/likeich/bible-sh
+License: MIT License
+EOF
+    sleep $1
+    clear
+}
+
 make_selection() {
     local prompt="$1"
     local options="$2"
@@ -99,7 +136,7 @@ make_selection() {
 }
 
 view_menu() {
-    echo $(make_selection "The Holy Bible" "1. View Book\n2. View Chapter\n3. View Verse\n4. View Welcome (15s)\n5. Exit")
+    echo $(make_selection "The Holy Bible" "$view_book_option\n$view_chapter_option\n$view_verse_option\n$welcome_option\n$about_option\n$exit_option")
 }
 
 view_text() {
